@@ -28,7 +28,8 @@ pipeline {
          sh 'chmod +x owasp-dependency-check.sh'
          sh 'bash owasp-dependency-check.sh'
          sh 'cat /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml'
-         sh 'mv /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml /home/gateman'
+         sh 'mkdir /var/lib/jenkins/dumps
+         sh 'mv /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml /var/lib/jenkins/dumps/'
         
       }
     }
