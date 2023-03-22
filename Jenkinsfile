@@ -37,6 +37,7 @@ pipeline {
         withSonarQubeEnv('sonar') {
           sh 'mvn sonar:sonar'
           sh 'cat /var/lib/jenkins/workspace/webapp00/target/sonar/report-task.txt'
+          sh 'sudo mv /var/lib/jenkins/workspace/webapp00/target/sonar/report-task.txt /home/gateman/'
         }
       }
     }
