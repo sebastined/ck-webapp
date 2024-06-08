@@ -2,6 +2,9 @@ pipeline {
   agent any 
   tools {
     maven 'Maven3'
+    }
+  triggers {
+      pollSCM '*/5 * * * *'
   }
   stages {
     stage ('Initialize') {
@@ -33,7 +36,7 @@ pipeline {
       }
     }
     
-     stage ('SAST') {
+    stage ('SAST') {
       steps {
         withSonarQubeEnv('sonar') {
           sh 'mvn sonar:sonar'
@@ -44,8 +47,23 @@ pipeline {
     
     stage ('Build') {
       steps {
-      sh 'mvn clean package'
-       }
-    }  
+        sh 'mvn clean package'
+      }
+    }
+    
+    stage ('Deploy-To-Docker') {
+      steps {
+        script {
+          // Build Docker image
+          sh 'docker build -t sebastined/webapp .'
+          
+          // Tag Docker image
+          sh 'docker tag webapp -name sebastined/webapp'
+          
+          // Push Docker image to Docker registry
+          sh 'docker push sebastined/webapp'
+        }
+      }
+    }
   }
 }
